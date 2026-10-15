@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
+import { BrandMark } from './BrandMark';
 import { motion, AnimatePresence } from 'motion/react';
-import { ARTIST_INFO } from '../data/portfolioData';
+import { useContent } from '../context/ContentContext';
 
 interface NavigationDrawerProps {
   isOpen: boolean;
@@ -17,6 +18,8 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
   onNavigate,
   selectedCategory,
 }) => {
+  const { content } = useContent();
+  const { profile, categories } = content;
   // ESC key handler to close drawer
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -36,7 +39,6 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
     { id: 'contact', label: 'CONTACT' },
   ];
 
-  const categories = ['MASTER KV', 'CAMPAIGN', 'RETOUCHING', 'POST PRODUCTION', 'SM DESIGNS'];
 
   return (
     <AnimatePresence>
@@ -61,9 +63,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             {/* Top Bar inside Drawer */}
             <div className="flex items-center justify-between pb-8 border-b border-[#292929]">
-              <span className="font-syne text-xl font-bold tracking-tight text-white uppercase">
-                labib<span className="text-[#F59E0B]">.</span>studio
-              </span>
+              <BrandMark brand={profile.brand} className="font-syne text-xl font-bold tracking-tight text-white uppercase" />
               <button
                 onClick={onClose}
                 className="text-xs uppercase tracking-widest text-[#A1A1AA] hover:text-[#F59E0B] transition-colors"
@@ -126,7 +126,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
             {/* Drawer Footer */}
             <div className="pt-8 border-t border-[#292929] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs text-[#A1A1AA]">
               <div className="flex items-center gap-4">
-                {ARTIST_INFO.socials.map((s) => (
+                {profile.socials.map((s) => (
                   <a
                     key={s.label}
                     href={s.url}
@@ -139,7 +139,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
                 ))}
               </div>
               <span className="uppercase tracking-widest text-[10px]">
-                LABIB STUDIO 2026 · BY MEDHAT LABIB
+                {profile.brand} {new Date().getFullYear()} · BY {profile.name}
               </span>
             </div>
           </motion.div>

@@ -2,7 +2,7 @@ export interface Project {
   id: string;
   title: string;
   subtitle: string;
-  category: 'MASTER KV' | 'CAMPAIGN' | 'RETOUCHING' | 'POST PRODUCTION' | 'SM DESIGNS';
+  category: string;
   client: string;
   year: string;
   coverImage: string;
@@ -188,18 +188,120 @@ export const PROJECTS_DATA: Project[] = [
   }
 ];
 
-export const ARTIST_INFO = {
+export interface SocialLink {
+  label: string;
+  url: string;
+}
+
+export interface ArtistInfo {
+  name: string;
+  title: string;
+  brand: string;
+  headline: string;
+  portrait: string;
+  experienceYears: string;
+  gulfExperienceYears: string;
+  bio: string;
+  phone: string;
+  email: string;
+  location: string;
+  workingHours: string;
+  socials: SocialLink[];
+}
+
+export interface Service {
+  id: string;
+  title: string;
+  subtitle: string;
+  image: string;
+  features: string[];
+  filterCategory: string;
+}
+
+export interface SiteSettings {
+  customCursor: boolean;
+  heroAutoplaySeconds: number;
+}
+
+export interface SiteContent {
+  profile: ArtistInfo;
+  projects: Project[];
+  services: Service[];
+  categories: string[];
+  settings: SiteSettings;
+}
+
+export const CATEGORIES = ['MASTER KV', 'CAMPAIGN', 'RETOUCHING', 'POST PRODUCTION', 'SM DESIGNS'];
+
+export const ARTIST_INFO: ArtistInfo = {
   name: 'Medhat Labib',
   title: 'Visual Artist & Art Director',
+  brand: 'labib.studio',
+  headline: 'Visual artist with over a decade of experience crafting high-impact commercial campaigns across Egypt & the Gulf.',
+  portrait: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1000&q=85',
   experienceYears: '10+',
   gulfExperienceYears: '5+',
   bio: 'Visual artist with +10 years in Egypt & abroad, collaborating with leading agencies and global brands in Egypt and the Gulf market. Specialized in CGI composition, key visual master production, 3D retouching, and high-impact digital campaigns.',
   phone: '(+20) 01098757266',
   email: 'INFO@LABIBSTUDIO.COM',
   location: 'CAIRO, EGYPT',
+  workingHours: '10:00 AM to 8:00 PM',
   socials: [
     { label: 'INSTAGRAM', url: 'https://instagram.com' },
     { label: 'BEHANCE', url: 'https://behance.net' },
     { label: 'LINKEDIN', url: 'https://linkedin.com' }
   ]
+};
+
+export const SERVICES_DATA: Service[] = [
+  {
+    id: 'post-production',
+    title: 'POST PRODUCTION',
+    subtitle: 'Advanced Retouching & CGI Integration',
+    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1200&q=85',
+    features: [
+      '3D & CGI Asset Composite',
+      'Complex High-Res Retouching',
+      'Sub-zero Frost & Dynamic Particles',
+      'Color Grading & Atmospheric Lighting',
+    ],
+    filterCategory: 'POST PRODUCTION',
+  },
+  {
+    id: 'campaigns',
+    title: 'CAMPAIGNS',
+    subtitle: '360° Commercial Visual Key Art',
+    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=85',
+    features: [
+      'Master Key Visual (KV) Production',
+      'Commercial Advertising Art Direction',
+      'Regional Saudi & Gulf Campaigns',
+      'Multi-Platform Campaign Adaptations',
+    ],
+    filterCategory: 'CAMPAIGN',
+  },
+  {
+    id: 'posters',
+    title: 'POSTERS & KV',
+    subtitle: 'High-Impact Editorial Posters',
+    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=85',
+    features: [
+      'Billboard & Out-of-Home Graphics',
+      'Social Media Master Banners',
+      'Architectural & Spatial Typography',
+      'Brand Identity Visual Language',
+    ],
+    filterCategory: 'MASTER KV',
+  },
+];
+
+export const DEFAULT_CONTENT: SiteContent = {
+  profile: ARTIST_INFO,
+  projects: PROJECTS_DATA,
+  services: SERVICES_DATA,
+  categories: CATEGORIES,
+  settings: {
+    customCursor: true,
+    heroAutoplaySeconds: 6,
+  },
 };

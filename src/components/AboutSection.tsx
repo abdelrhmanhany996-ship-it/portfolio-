@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ARTIST_INFO } from '../data/portfolioData';
+import { useContent } from '../context/ContentContext';
 import { Mail, Phone, MapPin, Award, CheckCircle } from 'lucide-react';
 
 interface AboutSectionProps {
@@ -8,16 +8,17 @@ interface AboutSectionProps {
 }
 
 export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigateContact }) => {
+  const profile = useContent().content.profile;
   return (
     <section className="min-h-screen bg-[#080808] pt-28 pb-20 px-6 lg:px-16 lg:pr-24 flex flex-col justify-center">
       <div className="max-w-7xl mx-auto w-full">
         {/* Header */}
         <div className="border-b border-[#292929] pb-8 mb-12">
           <span className="text-xs uppercase tracking-[0.2em] text-[#F59E0B] font-semibold block mb-2">
-            ART DIRECTOR &amp; VISUAL ARTIST
+            {profile.title}
           </span>
           <h2 className="font-syne text-4xl sm:text-6xl font-extrabold uppercase text-white tracking-tight">
-            About {ARTIST_INFO.name}
+            About {profile.name}
           </h2>
         </div>
 
@@ -32,8 +33,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigateContact })
           >
             <div className="relative aspect-[3/4] bg-[#121212] border border-[#292929] rounded-2xl overflow-hidden shadow-2xl group">
               <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1000&q=85"
-                alt={ARTIST_INFO.name}
+                src={profile.portrait}
+                alt={profile.name}
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 filter grayscale contrast-125"
                 referrerPolicy="no-referrer"
               />
@@ -41,7 +42,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigateContact })
 
               {/* Stat Badge Overlay */}
               <div className="absolute top-6 right-6 px-4 py-2 bg-[#F59E0B] text-black rounded-xl font-syne font-extrabold text-2xl tracking-tight shadow-xl flex items-center gap-1">
-                <span>+10</span>
+                <span>{profile.experienceYears}</span>
                 <span className="text-xs font-semibold uppercase tracking-widest block leading-tight">
                   YEARS<br />EXP
                 </span>
@@ -49,10 +50,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigateContact })
 
               <div className="absolute bottom-6 left-6 right-6">
                 <span className="text-xs font-bold uppercase tracking-widest text-[#F59E0B]">
-                  LABIB STUDIO FOUNDER
+                  {profile.brand} FOUNDER
                 </span>
                 <h3 className="font-syne text-2xl font-extrabold text-white uppercase">
-                  {ARTIST_INFO.name}
+                  {profile.name}
                 </h3>
               </div>
             </div>
@@ -67,10 +68,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigateContact })
           >
             <div className="space-y-4">
               <h3 className="font-syne text-2xl sm:text-3xl font-bold uppercase text-white tracking-tight leading-snug">
-                Visual artist with over a decade of experience crafting high-impact commercial campaigns across Egypt &amp; the Gulf.
+                {profile.headline}
               </h3>
               <p className="text-sm sm:text-base text-[#A1A1AA] leading-relaxed">
-                {ARTIST_INFO.bio}
+                {profile.bio}
               </p>
             </div>
 
@@ -79,7 +80,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigateContact })
               <div className="p-4 bg-[#121212] border border-[#292929] rounded-xl space-y-1">
                 <div className="flex items-center gap-2 text-[#F59E0B]">
                   <Award className="w-4 h-4" />
-                  <span className="font-syne font-extrabold text-xl text-white">10+ Years</span>
+                  <span className="font-syne font-extrabold text-xl text-white">{profile.experienceYears} Years</span>
                 </div>
                 <p className="text-xs text-[#A1A1AA]">
                   International &amp; regional agency art direction.
@@ -89,7 +90,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigateContact })
               <div className="p-4 bg-[#121212] border border-[#292929] rounded-xl space-y-1">
                 <div className="flex items-center gap-2 text-[#F59E0B]">
                   <CheckCircle className="w-4 h-4" />
-                  <span className="font-syne font-extrabold text-xl text-white">5+ Years</span>
+                  <span className="font-syne font-extrabold text-xl text-white">{profile.gulfExperienceYears} Years</span>
                 </div>
                 <p className="text-xs text-[#A1A1AA]">
                   Dedicated experience in the Gulf market (KSA, UAE, Kuwait).
@@ -101,15 +102,15 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigateContact })
             <div className="pt-6 border-t border-[#292929] flex flex-wrap gap-6 text-xs text-[#A1A1AA]">
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-[#F59E0B]" />
-                <span className="font-mono text-white">{ARTIST_INFO.phone}</span>
+                <span className="font-mono text-white">{profile.phone}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-[#F59E0B]" />
-                <span className="text-white">{ARTIST_INFO.email}</span>
+                <span className="text-white">{profile.email}</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-[#F59E0B]" />
-                <span className="text-white">{ARTIST_INFO.location}</span>
+                <span className="text-white">{profile.location}</span>
               </div>
             </div>
 

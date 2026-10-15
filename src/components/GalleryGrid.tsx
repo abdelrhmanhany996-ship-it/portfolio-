@@ -8,6 +8,7 @@ interface GalleryGridProps {
   selectedCategory?: string;
   onSelectCategory: (category: string) => void;
   onOpenProject: (project: Project) => void;
+  categories?: string[];
 }
 
 export const GalleryGrid: React.FC<GalleryGridProps> = ({
@@ -15,10 +16,11 @@ export const GalleryGrid: React.FC<GalleryGridProps> = ({
   selectedCategory = 'ALL',
   onSelectCategory,
   onOpenProject,
+  categories: projectCategories = [],
 }) => {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  const categories = ['ALL', 'MASTER KV', 'CAMPAIGN', 'RETOUCHING', 'POST PRODUCTION', 'SM DESIGNS'];
+  const categories = ['ALL', ...projectCategories];
 
   const filteredProjects = selectedCategory === 'ALL'
     ? projects
@@ -82,6 +84,7 @@ export const GalleryGrid: React.FC<GalleryGridProps> = ({
                 onMouseEnter={() => setHoveredId(project.id)}
                 onMouseLeave={() => setHoveredId(null)}
                 onClick={() => onOpenProject(project)}
+                data-cursor="view"
                 className="group relative h-96 bg-[#121212] border border-[#292929] rounded-xl overflow-hidden cursor-pointer focus-within:ring-2 focus-within:ring-[#F59E0B]"
               >
                 {/* Project Image */}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
+import { useContent } from '../context/ContentContext';
 
 interface ServicesSectionProps {
   onSelectCategory: (category: string) => void;
@@ -11,47 +12,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   onSelectCategory,
   onNavigateContact,
 }) => {
-  const services = [
-    {
-      id: 'POST PRODUCTION',
-      title: 'POST PRODUCTION',
-      subtitle: 'Advanced Retouching & CGI Integration',
-      image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1200&q=85',
-      features: [
-        '3D & CGI Asset Composite',
-        'Complex High-Res Retouching',
-        'Sub-zero Frost & Dynamic Particles',
-        'Color Grading & Atmospheric Lighting',
-      ],
-      filterCategory: 'POST PRODUCTION',
-    },
-    {
-      id: 'CAMPAIGNS',
-      title: 'CAMPAIGNS',
-      subtitle: '360° Commercial Visual Key Art',
-      image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=85',
-      features: [
-        'Master Key Visual (KV) Production',
-        'Commercial Advertising Art Direction',
-        'Regional Saudi & Gulf Campaigns',
-        'Multi-Platform Campaign Adaptations',
-      ],
-      filterCategory: 'CAMPAIGN',
-    },
-    {
-      id: 'POSTERS',
-      title: 'POSTERS & KV',
-      subtitle: 'High-Impact Editorial Posters',
-      image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=85',
-      features: [
-        'Billboard & Out-of-Home Graphics',
-        'Social Media Master Banners',
-        'Architectural & Spatial Typography',
-        'Brand Identity Visual Language',
-      ],
-      filterCategory: 'MASTER KV',
-    },
-  ];
+  const { services } = useContent().content;
 
   return (
     <section className="min-h-screen bg-[#080808] pt-28 pb-20 px-6 lg:px-16 lg:pr-24 flex flex-col justify-center">
@@ -90,7 +51,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             {/* Top Content */}
             <div className="relative z-20 space-y-3">
               <span className="text-xs font-mono font-bold text-[#F59E0B] tracking-widest">
-                0{idx + 1} // CAPABILITY
+                {String(idx + 1).padStart(2, '0')} // CAPABILITY
               </span>
               <h3 className="font-syne text-2xl sm:text-3xl font-extrabold uppercase text-white tracking-tight">
                 {service.title}
@@ -103,8 +64,8 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             {/* Bottom Content & Feature List */}
             <div className="relative z-20 space-y-6">
               <ul className="space-y-2.5 text-xs text-[#A1A1AA]">
-                {service.features.map((feat) => (
-                  <li key={feat} className="flex items-center gap-2">
+                {service.features.map((feat, i) => (
+                  <li key={feat + i} className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#F59E0B]" />
                     <span>{feat}</span>
                   </li>

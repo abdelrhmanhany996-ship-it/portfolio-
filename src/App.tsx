@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { PROJECTS_DATA, Project } from './data/portfolioData';
+import { Project } from './data/portfolioData';
+import { useContent } from './context/ContentContext';
+import { CustomCursor } from './components/CustomCursor';
 import { NavigationEdge } from './components/NavigationEdge';
 import { HeaderBar } from './components/HeaderBar';
 import { NavigationDrawer } from './components/NavigationDrawer';
@@ -11,6 +13,7 @@ import { AboutSection } from './components/AboutSection';
 import { ContactSection } from './components/ContactSection';
 
 export default function App() {
+  const { content } = useContent();
   const [activeView, setActiveView] = useState<string>('home');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -67,14 +70,17 @@ export default function App() {
       <main className="w-full min-h-screen">
         {activeView === 'home' && (
           <HeroSlider
-            projects={PROJECTS_DATA}
+            projects={content.projects}
             onOpenProject={handleOpenProject}
+            socials={content.profile.socials}
+            autoplaySeconds={content.settings.heroAutoplaySeconds}
           />
         )}
 
         {activeView === 'gallery' && (
           <GalleryGrid
-            projects={PROJECTS_DATA}
+            projects={content.projects}
+            categories={content.categories}
             selectedCategory={selectedCategory}
             onSelectCategory={handleSelectCategory}
             onOpenProject={handleOpenProject}
@@ -98,6 +104,8 @@ export default function App() {
           <ContactSection />
         )}
       </main>
+
+      {content.settings.customCursor && <CustomCursor />}
 
       {/* Interactive Lightbox / Modal Project Viewer */}
       <LightboxModal

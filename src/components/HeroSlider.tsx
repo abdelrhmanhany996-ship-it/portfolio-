@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, Variants } from 'motion/react';
 import { ChevronLeft, ChevronRight, ArrowUpRight } from 'lucide-react';
-import { Project } from '../data/portfolioData';
+import { Project, SocialLink } from '../data/portfolioData';
 
 interface HeroSliderProps {
   projects: Project[];
   onOpenProject: (project: Project) => void;
+  socials?: SocialLink[];
+  autoplaySeconds?: number;
 }
 
-export const HeroSlider: React.FC<HeroSliderProps> = ({ projects, onOpenProject }) => {
+export const HeroSlider: React.FC<HeroSliderProps> = ({ projects, onOpenProject, socials = [], autoplaySeconds = 0 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<number>(1);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -40,6 +42,14 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ projects, onOpenProject 
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [nextSlide, prevSlide]);
 
+  // Autoplay (paused while hovering)
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    if (!autoplaySeconds || paused || totalSlides < 2) return;
+    const t = window.setInterval(nextSlide, autoplaySeconds * 1000);
+    return () => window.clearInterval(t);
+  }, [autoplaySeconds, paused, totalSlides, nextSlide, currentIndex]);
+
   // Handle mouse wheel for sliding
   const handleWheel = (e: React.WheelEvent) => {
     if (Math.abs(e.deltaY) > 40) {
@@ -62,7 +72,15 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ projects, onOpenProject 
     }
   };
 
-  const currentProject = featuredProjects[currentIndex];
+  const currentProject = featuredProjects[currentIndex % Math.max(totalSlides, 1)];
+
+  if (!currentProject) {
+    return (
+      <div className="h-screen flex items-center justify-center text-[#A1A1AA] text-xs uppercase tracking-widest">
+        No projects published yet.
+      </div>
+    );
+  }
 
   const slideVariants: Variants = {
     enter: (dir: number) => ({
@@ -96,6 +114,8 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ projects, onOpenProject 
       onWheel={handleWheel}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
       className="relative w-full h-screen overflow-hidden bg-[#080808] select-none"
     >
       {/* Background Showcase Carousel */}
@@ -162,6 +182,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ projects, onOpenProject 
             <div className="pt-2">
               <button
                 onClick={() => onOpenProject(currentProject)}
+                data-cursor="view"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-[#F59E0B] hover:bg-[#D97706] text-black font-syne text-xs font-bold uppercase tracking-widest rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg shadow-[#F59E0B]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 <span>VIEW PROJECT</span>
@@ -177,7 +198,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ projects, onOpenProject 
         {/* Slide Counter */}
         <div className="font-syne text-sm font-bold tracking-widest text-white">
           <span className="text-[#F59E0B]">
-            {String(currentIndex + 1).padStart(2, '0')}
+            {String((currentIndex % totalSlides) + 1).padStart(2, '0')}
           </span>
           <span className="text-[#292929] mx-1.5">/</span>
           <span className="text-[#A1A1AA]">
@@ -205,34 +226,18 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ projects, onOpenProject 
       </div>
 
       {/* Bottom Left Social Links Bar */}
-      <div className="hidden lg:flex fixed bottom-8 left-16 z-20 items-center gap-6 text-[10px] uppercase tracking-[0.2em] text-[#A1A1AA]">
-        <a
-          href="https://instagram.com"
-          target="_blank"
-          rel="noreferrer"
-          className="hover:text-[#F59E0B] transition-colors"
-        >
-          INSTAGRAM
-        </a>
-        <span>·</span>
-        <a
-          href="https://behance.net"
-          target="_blank"
-          rel="noreferrer"
-          className="hover:text-[#F59E0B] transition-colors"
-        >
-          BEHANCE
-        </a>
-        <span>·</span>
-        <a
-          href="https://linkedin.com"
-          target="_blank"
-          rel="noreferrer"
-          className="hover:text-[#F59E0B] transition-colors"
-        >
-          LINKEDIN
-        </a>
-      </div>
+      {socials.length > 0 && (
+        <div className="hidden lg:flex fixed bottom-8 left-16 z-20 items-center gap-6 text-[10px] uppercase tracking-[0.2em] text-[#A1A1AA]">
+          {socials.map((s, i) => (
+            <React.Fragment key={s.label + i}>
+              {i > 0 && <span>·</span>}
+              <a href={s.url} target="_blank" rel="noreferrer" className="hover:text-[#F59E0B] transition-colors">
+                {s.label}
+              </a>
+            </React.Fragment>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

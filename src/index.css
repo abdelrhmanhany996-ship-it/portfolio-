@@ -41,3 +41,15 @@
 .bg-radial-glow {
   background: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
 }
+
+/* Custom cursor: hide the native pointer except over text fields */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+
+html.has-custom-cursor input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+html.has-custom-cursor textarea,
+html.has-custom-cursor [contenteditable="true"] {
+  cursor: text !important;
+}

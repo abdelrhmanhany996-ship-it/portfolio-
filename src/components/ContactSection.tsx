@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { ARTIST_INFO } from '../data/portfolioData';
+import { useContent } from '../context/ContentContext';
+import { api } from '../lib/api';
 import { Send, Phone, Mail, MapPin, CheckCircle2 } from 'lucide-react';
 
 export const ContactSection: React.FC = () => {
+  const profile = useContent().content.profile;
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -18,10 +21,12 @@ export const ContactSection: React.FC = () => {
     if (!formData.fullName || !formData.email || !formData.message) return;
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-    }, 800);
+    setError('');
+    api
+      .sendMessage({ name: formData.fullName, email: formData.email, message: formData.message })
+      .then(() => setSubmitted(true))
+      .catch(() => setError(`Couldn't send right now. Please email ${profile.email} directly.`))
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -36,7 +41,7 @@ export const ContactSection: React.FC = () => {
             Drop me a line
           </h2>
           <p className="text-xs text-[#A1A1AA] uppercase tracking-widest">
-            Feel free to contact me anytime from 10:00 AM to 8:00 PM
+            Feel free to contact me anytime from {profile.workingHours}
           </p>
         </div>
 
@@ -121,6 +126,12 @@ export const ContactSection: React.FC = () => {
                 />
               </div>
 
+              {error && (
+                <p role="alert" className="text-center text-xs text-red-400">
+                  {error}
+                </p>
+              )}
+
               {/* Submit Button */}
               <div className="text-center pt-4">
                 <button
@@ -142,10 +153,10 @@ export const ContactSection: React.FC = () => {
             <Phone className="w-5 h-5 text-[#F59E0B] mx-auto" />
             <span className="text-[10px] uppercase tracking-widest text-[#A1A1AA] block">PHONE</span>
             <a
-              href={`tel:${ARTIST_INFO.phone}`}
+              href={`tel:${profile.phone}`}
               className="font-mono text-sm font-bold text-white hover:text-[#F59E0B] transition-colors block"
             >
-              {ARTIST_INFO.phone}
+              {profile.phone}
             </a>
           </div>
 
@@ -153,10 +164,10 @@ export const ContactSection: React.FC = () => {
             <Mail className="w-5 h-5 text-[#F59E0B] mx-auto" />
             <span className="text-[10px] uppercase tracking-widest text-[#A1A1AA] block">EMAIL</span>
             <a
-              href={`mailto:${ARTIST_INFO.email}`}
+              href={`mailto:${profile.email}`}
               className="text-xs font-bold text-white hover:text-[#F59E0B] transition-colors block"
             >
-              {ARTIST_INFO.email}
+              {profile.email}
             </a>
           </div>
 
@@ -164,7 +175,7 @@ export const ContactSection: React.FC = () => {
             <MapPin className="w-5 h-5 text-[#F59E0B] mx-auto" />
             <span className="text-[10px] uppercase tracking-widest text-[#A1A1AA] block">LOCATION</span>
             <span className="text-xs font-bold text-white block">
-              {ARTIST_INFO.location}
+              {profile.location}
             </span>
           </div>
         </div>

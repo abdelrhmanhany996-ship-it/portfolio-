@@ -1,5 +1,7 @@
 import React from 'react';
 import { Menu, X } from 'lucide-react';
+import { BrandMark } from './BrandMark';
+import { useContent } from '../context/ContentContext';
 
 interface HeaderBarProps {
   isMenuOpen: boolean;
@@ -16,6 +18,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   contextTitle,
   onNavigateHome,
 }) => {
+  const { content } = useContent();
   return (
     <header className="fixed top-0 left-0 right-0 lg:right-16 z-50 h-20 px-6 lg:px-10 flex items-center justify-between bg-gradient-to-b from-[#080808]/90 via-[#080808]/50 to-transparent backdrop-blur-xs pointer-events-auto">
       {/* Brand Zone */}
@@ -24,9 +27,10 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           onClick={onNavigateHome}
           className="text-left group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F59E0B] rounded-sm"
         >
-          <span className="font-syne text-xl lg:text-2xl font-extrabold tracking-tight text-white group-hover:text-[#F59E0B] transition-colors uppercase">
-            labib<span className="text-[#F59E0B]">.</span>studio
-          </span>
+          <BrandMark
+            brand={content.profile.brand}
+            className="font-syne text-xl lg:text-2xl font-extrabold tracking-tight text-white group-hover:text-[#F59E0B] transition-colors uppercase"
+          />
         </button>
       </div>
 
